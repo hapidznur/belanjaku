@@ -1,0 +1,16 @@
+[package]
+name = "belanjaku"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+teloxide = { version = "0.13.0", features = ["macros", "redis-storage", "cbor-serializer"] }
+log = "0.4"
+dotenv = "0.15.0"
+tokio = { version = "1.38", features = ["rt-multi-thread", "macros"] }
+serde = { version = "1.0", features = ["derive"]}
+serde_json = "1.0"
+pretty_env_logger = "0.5"
+chrono = "0.4.38"
+teloxide_tests = "0.2.0"
+postgrest = "1.0"

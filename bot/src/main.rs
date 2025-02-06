@@ -62,21 +62,21 @@ async fn start(bot: Bot, dialogue: MyDialogue, msg: Message) -> HandlerResult {
             for date in &mut collection{
                 println!("{}", date)
             }
-            let mut date_str = collection[0].clone();
+            let date_str = collection[0];
             let date = NaiveDate::parse_from_str(date_str, "%Y%m%d").unwrap();
             println!("{}", date.to_string());
-            let typeGroceries = collection[1].clone();
+            let typeGroceries = collection[1];
             match typeGroceries {
-                "food" | "housing" => {
+                "food" | "housing" | "personal" | "ngopi" | "jalan" |"other" => {
                  },
                  _ => {
                     bot.send_message(msg.chat.id, "Send correct format YYYYMMDD:type{food|housing}:numeric{K|H|M}:description").await?;
                     dialogue.exit().await?;
                  },
             };
-            let mut price = collection[2].clone();
+            let price = collection[2];
             // check Price is have format {number}K or number only
-            let mut description = collection[3].clone();
+            let description = collection[3];
             let item = Item {
                 price: price.to_string(),
                 category: typeGroceries.to_string(),
@@ -86,7 +86,8 @@ async fn start(bot: Bot, dialogue: MyDialogue, msg: Message) -> HandlerResult {
 
             supadb::insert_to_db(item).await?;
             bot.send_message(msg.chat.id, "Success Receive Bon. Hemat-hemat ya").await?;
-         }
+            dialogue.exit().await?;
+          }
         None => {
             bot.send_message(msg.chat.id, "Send correct format YYYYMMDD:type{food|house}:numeric{K|H|M}:description").await?;
         }

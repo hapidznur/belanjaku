@@ -27,7 +27,6 @@ pub enum State {
     Start,
 }
 
-
 #[tokio::main]
 async fn main() {
     dotenv().ok();
@@ -50,27 +49,20 @@ async fn main() {
 }
 
 async fn start(bot: Bot, dialogue: MyDialogue, msg: Message) -> HandlerResult {
- //   bot.send_message(msg.chat.id, "Let's start! What's your full name?").await?;
-    println!("{}", msg.chat.id);
-    // split string check is match with structure
    match msg.text(){
         Some(text)=> {
-            println!("{}", text.to_string());
             let purchased = text.to_string();
             let parts = purchased.split(":");
-            let mut collection = parts.collect::<Vec<&str>>();
-            for date in &mut collection{
-                println!("{}", date)
-            }
+            let collection = parts.collect::<Vec<&str>>();
             let date_str = collection[0];
             let date = NaiveDate::parse_from_str(date_str, "%Y%m%d").unwrap();
             println!("{}", date.to_string());
-            let typeGroceries = collection[1];
-            match typeGroceries {
+            let type_groceries = collection[1];
+            match type_groceries {
                 "food" | "housing" | "personal" | "ngopi" | "jalan" |"other" => {
                  },
                  _ => {
-                    bot.send_message(msg.chat.id, "Send correct format YYYYMMDD:type{food|housing}:numeric{K|H|M}:description").await?;
+                    bot.send_message(msg.chat.id, "Send correct format YYYYMMDD:type{food|housing|personal|ngopi|jalan}:numeric{K|H|M}:description").await?;
                     dialogue.exit().await?;
                  },
             };
@@ -89,8 +81,8 @@ async fn start(bot: Bot, dialogue: MyDialogue, msg: Message) -> HandlerResult {
             dialogue.exit().await?;
           }
         None => {
-            bot.send_message(msg.chat.id, "Send correct format YYYYMMDD:type{food|house}:numeric{K|H|M}:description").await?;
-        }
+            bot.send_message(msg.chat.id, "Send correct format YYYYMMDD:type{food|housing|personal|ngopi|jalan}:numeric{K|H|M}:description").await?;
+         }
    }
     // dialogue.update(State::ReceiveFullName).await?;
     Ok(())

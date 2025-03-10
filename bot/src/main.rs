@@ -62,7 +62,7 @@ async fn start(bot: Bot, dialogue: MyDialogue, msg: Message) -> HandlerResult {
                 "food" | "housing" | "personal" | "ngopi" | "jalan" |"other" => {
                  },
                  _ => {
-                    bot.send_message(msg.chat.id, "Send correct format YYYYMMDD:type{food|housing|personal|ngopi|jalan}:numeric{K|H|M}:description").await?;
+                    bot.send_message(msg.chat.id, "food|housing|personal|ngopi|jalan type groceries supported").await?;
                     dialogue.exit().await?;
                  },
             };
@@ -71,7 +71,7 @@ async fn start(bot: Bot, dialogue: MyDialogue, msg: Message) -> HandlerResult {
             let description = collection[3];
             let item = Item {
                 price: price.to_string(),
-                category: typeGroceries.to_string(),
+                category: type_groceries.to_string(),
                 description: description.to_string(),
                 date: date.to_string(),
             };

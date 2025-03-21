@@ -12,10 +12,11 @@ pub struct Item {
     pub date: String,
 }
 
-pub async fn insert_to_db(item: Item) -> Result<()> {
+pub async fn insert_item(item: Item) -> Result<()> {
     let supabase_url = env::var("SUPABASE_URL").expect("SUPABASE_URL must be set");
     let supabase_key = env::var("SUPABASE_API_KEY").expect("SUPABASE_API_KEY must be set");
     let supabase_service_key = env::var("SERVICE_KEY").expect("SUPABASE_API_KEY must be set");
+    let supabase_table = env::var("SUPABASE_TABLE").expect("String included");
     eprintln!("{}", supabase_url);
     eprintln!("{}", supabase_key);
     let supabase_uri = format!("{}/rest/v1/", supabase_url);
@@ -27,7 +28,7 @@ pub async fn insert_to_db(item: Item) -> Result<()> {
     let json_string = serde_json::to_string(&item)?;
 
     let resp = client
-        .from("Item")
+        .from(supabase_table)
         .insert(json_string)
         .execute()
         .await?;

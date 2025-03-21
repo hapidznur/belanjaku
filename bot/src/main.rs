@@ -56,7 +56,6 @@ async fn start(bot: Bot, dialogue: MyDialogue, msg: Message) -> HandlerResult {
             let collection = parts.collect::<Vec<&str>>();
             let date_str = collection[0];
             let date = NaiveDate::parse_from_str(date_str, "%Y%m%d").unwrap();
-            println!("{}", date.to_string());
             let type_groceries = collection[1];
             match type_groceries {
                 "food" | "housing" | "personal" | "ngopi" | "jalan" |"other" => {
@@ -75,8 +74,7 @@ async fn start(bot: Bot, dialogue: MyDialogue, msg: Message) -> HandlerResult {
                 description: description.to_string(),
                 date: date.to_string(),
             };
-
-            supadb::insert_to_db(item).await?;
+            supadb::insert_itemitem).await?;
             bot.send_message(msg.chat.id, "Success Receive Bon. Hemat-hemat ya").await?;
             dialogue.exit().await?;
           }

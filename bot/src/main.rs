@@ -73,8 +73,9 @@ async fn start(bot: Bot, dialogue: MyDialogue, msg: Message) -> HandlerResult {
                 category: type_groceries.to_string(),
                 description: description.to_string(),
                 date: date.to_string(),
+                chat_id: msg.chat.id.to_string(),
             };
-            supadb::insert_itemitem).await?;
+            supadb::insert_item(item).await?;
             bot.send_message(msg.chat.id, "Success Receive Bon. Hemat-hemat ya").await?;
             dialogue.exit().await?;
           }

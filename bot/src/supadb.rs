@@ -10,6 +10,7 @@ pub struct Item {
     pub category: String,
     pub description: String,
     pub date: String,
+    pub chat_id: String,
 }
 
 pub async fn insert_item(item: Item) -> Result<()> {

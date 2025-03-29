@@ -1,15 +1,15 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-./admin/node_modules
-./.pnp
+**/node_modules
+.pnp
 .pnp.js
 
 # testing
-./admin/coverage
+**/coverage
 
 # production
-./admin/build
+**/build
 
 # misc
 ./admin/.DS_Store
@@ -19,9 +19,9 @@
 ./admin/.env.production.local
 
 npm-debug.log*
-./admin/package-lock.json*
+admin/package-lock.json*
 yarn-debug.log*
 yarn-error.log*
 yarn.lock*
 
-./admin/.env
+**/.env

@@ -17,7 +17,9 @@ use chrono::NaiveDate;
 use dotenv::dotenv;
 mod supadb;
 use crate::supadb::Item;
-use teloxide::{dispatching::dialogue::InMemStorage, prelude::*};
+use teloxide::{dispatching::dialogue::InMemStorage, 
+    prelude::*,
+    types::{PhotoSize}};
 type MyDialogue = Dialogue<State, InMemStorage<State>>;
 type HandlerResult = Result<(), Box<dyn std::error::Error + Send + Sync>>;
 
@@ -25,6 +27,7 @@ type HandlerResult = Result<(), Box<dyn std::error::Error + Send + Sync>>;
 pub enum State {
     #[default]
     Start,
+    ReceivingPhoto,
 }
 
 #[tokio::main]
@@ -49,8 +52,7 @@ async fn main() {
 }
 
 async fn start(bot: Bot, dialogue: MyDialogue, msg: Message) -> HandlerResult {
-   match msg.text(){
-        Some(text)=> {
+        if let Some(text) = msg.text() {
             let purchased = text.to_string();
             let parts = purchased.split(":");
             let collection = parts.collect::<Vec<&str>>();
@@ -78,13 +80,24 @@ async fn start(bot: Bot, dialogue: MyDialogue, msg: Message) -> HandlerResult {
             supadb::insert_item(item).await?;
             bot.send_message(msg.chat.id, "Success Receive Bon. Hemat-hemat ya").await?;
             dialogue.exit().await?;
-          }
-        None => {
-            bot.send_message(msg.chat.id, "Send correct format YYYYMMDD:type{food|housing|personal|ngopi|jalan}:numeric{K|H|M}:description").await?;
-         }
-   }
+        }
+        if let Some(photos) = msg.photo(){
+            for (index, photo) in photos.iter().enumerate() {
+                println!("Size {}: {}x{}", index, photo.width, photo.height);
+                println!("File ID: {}", photo.file.id);
+            }
+            // let file: File = GetFile();
+            // let file_id: &str = &file.id;
+            // let file_unique_id: &str = &file.unique_id;
+            // let file_size: u32 = file.size;
+
+            bot.send_message(msg.chat.id, "Iki text").await?;
+            dialogue.exit().await?;
+        }
+        // None => {
+        //     bot.send_message(msg.chat.id, "Send correct format YYYYMMDD:type{food|housing|personal|ngopi|jalan}:numeric{K|H|M}:description").await?;
+        //  }
     // dialogue.update(State::ReceiveFullName).await?;
     Ok(())
 }
-
 
